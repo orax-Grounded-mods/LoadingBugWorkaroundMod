@@ -2,18 +2,18 @@ local UEHelpers = require("UEHelpers")
 
 local modInfo = (function()
   local info = debug.getinfo(2, "S")
-  local source = info.source
+  local source = info.source:gsub("\\", "/")
   return {
-    name = source:match("@?.+\\Mods\\([^\\]+)"),
+    name = source:match("@?.+/Mods/([^/]+)"),
     file = source:sub(2),
-    currentDirectory = source:match("@?(.+)\\"),
-    currentModDirectory = source:match("@?(.+\\Mods\\[^\\]+)"),
-    modsDirectory = source:match("@?(.+\\Mods)\\")
+    currentDirectory = source:match("@?(.+)/"),
+    currentModDirectory = source:match("@?(.+/Mods/[^/]+)"),
+    modsDirectory = source:match("@?(.+/Mods)/")
   }
 end)()
 
 ---@type LoadingBugWorkaroundMod_Options
-local Options = dofile(string.format("%s\\options.lua", modInfo.currentModDirectory))
+local Options = dofile(string.format("%s/options.lua", modInfo.currentModDirectory))
 
 local IsLoadingSave = false
 
